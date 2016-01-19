@@ -2,23 +2,33 @@ package com.company;
 
 public class Main {
 
+    public static boolean isProtein(String gene, String possibleStopCodon) {
+        int stopCodonIndex = gene.indexOf(possibleStopCodon);
+        System.out.println(stopCodonIndex);
+        return stopCodonIndex != -1 && (stopCodonIndex % 3) == 0;
+    }
+
+    public static String stopCodon(String gene) {
+        if (isProtein(gene, "tag")) return "tag";
+        if (isProtein(gene, "tga")) return "tga";
+        if (isProtein(gene, "taa")) return "taa";
+        return "";
+    }
+
     public static String findProtein(String dna) {
         int start = dna.indexOf("atg");
         if (start == -1) {
             return "";
         }
-        int stop = dna.indexOf("tag", start+3);
-        if ((stop - start) % 3 == 0) {
-            return dna.substring(start, stop+3);
-        }
-        else {
-            return "";
-        }
+        String gene = dna.substring(start);
+        String realStopCodon = stopCodon(gene);
+        if (realStopCodon.isEmpty()) return "";
+        return gene.substring(0, gene.indexOf(realStopCodon) + 3);
     }
 
     public static void testing() {
-        String a = "cccatggggtttaaataataataggagagagagagagagttt";
-        String ap = "atggggtttaaataataatag";
+        String a = "cccatggggttgaaataataataagagagagagagagagttt";
+        String ap = "atggggtttaaataa";
         //String a = "atgcctag";
         //String ap = "";
         //String a = "ATGCCCTAG";
